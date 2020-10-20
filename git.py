@@ -52,11 +52,14 @@ def get_pr_contibution_percent(url, org, auth):
             pr_count = pr_response.json()[0].get('number')
             if pr_response.json()[0].get('head', {}).get('repo', {}) is not None:
                 fork_count = pr_response.json()[0].get('head', {}).get('repo', {}).get('forks_count')
+                if fork_count !=0:
+                    contri_percentage = float(pr_count)/float(fork_count)
+                else:
+                    fork_count = 0
+                    contri_percentage = 0
             else:
                 fork_count = 0
                 contri_percentage = 0
-            if fork_count !=0:
-                contri_percentage = float(pr_count)/float(fork_count)
         else:
             pr_count = 0
             contri_percentage = 0
