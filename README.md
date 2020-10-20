@@ -26,10 +26,7 @@ ex.parser.add_argument('-flag', help = 'Flag to set the stats type. Default=All'
 3. Adding xception handling [403, ZeroDivisionError, etc]
 4. Adding Unit tests
 
-Limitation:
-
-
-Assumptions:
+Limitation/Assumptions:
 1. Pulling public repo
 2.  Considered only first 100 records [https://developer.github.com/v3/guides/traversing-with-pagination/]
 3.Fork= 0, If the PR api response is missing the dictionary key (head, repo)
