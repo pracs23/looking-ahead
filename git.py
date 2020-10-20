@@ -25,15 +25,16 @@ def run(args):
     get_top_stats(sorted_star_count, 'Number of Stars', level)
     sorted_fork_count  = get_repository_stats(fork_url, 'forks_count', auth)
     get_top_stats(sorted_fork_count, 'Number of Forks', level)
-    sorted_pr_count, sorted_percentage_count = get_pr_contibution_percent(github_base_url, auth)
+    sorted_pr_count, sorted_percentage_count = get_pr_contibution_percent(github_base_url, args.org, auth)
     get_top_stats(sorted_pr_count, 'Number of Pull Requests', level)
     get_top_stats(sorted_percentage_count, 'Contribution Percentage', level)
 
 
-def get_pr_contibution_percent(url, auth):
+def get_pr_contibution_percent(url, org, auth):
     """
     Method to return the Github repo stats for PR count and Contribution Percentage
     :param url: github PR url
+    :param org: github org
     :param auth: basic/oauth credentials passed from command line
     """
     repo_name_list = []
@@ -44,7 +45,7 @@ def get_pr_contibution_percent(url, auth):
     for repo in response.json().get('items'):
         repo_name_list.append(repo.get('name'))
     for repo_name in repo_name_list:
-        pr_url = 'https://api.github.com/repos/twitter/' + repo_name + '/pulls?state=all&direction=desc'
+        pr_url = 'https://api.github.com/repos/' + org + '/' + repo_name + '/pulls?state=all&direction=desc'
         pr_response = requests.get(pr_url, auth = auth)
         response.raise_for_status()
         if pr_response.json():
