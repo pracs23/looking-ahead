@@ -5,9 +5,12 @@ Readme:
 
 How to run:
 ==========
+[[basic/oauth] With credentials (Pass the password/token in token)
 
-script.py -org "Twitter" -top 2 -username “user” -token ‘token’ [basic/oauth]
-script.py -org "Twitter" -top 2 [No credentials run, API limit of 60/hour]
+script.py -org "Twitter" -top 2 -username “user” -token ‘token’ 
+
+[No credentials run, API limit of 60/hour]
+script.py -org "Twitter" -top 2 
 
 Unit test:
 =========
