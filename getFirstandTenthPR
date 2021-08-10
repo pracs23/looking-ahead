@@ -13,7 +13,7 @@ def run(args):
     logging.getLogger().setLevel(logging.INFO)
     headers = {'Authorization': 'token %s' % args.token}
     github_year = str(int(args.year) + 1)
-    github_pr_url = 'https://api.github.com/search/issues?q=org:AudaxHealthInc+author:' + args.username + '+type:pr+created:<' + github_year + '-01-01+sort:author-date-asc'
+    github_pr_url = 'https://api.github.com/search/issues?q=org:<orgname>+author:' + args.username + '+type:pr+created:<' + github_year + '-01-01+sort:author-date-asc'
     logging.info("***** PR Stats for Github user: '{}' is as below, entered joining year: '{}' (Note: PR stats depend on the accuracy of entered joining year *****".format(args.username, args.year))
     get_all_prs_for_a_user(github_pr_url, headers)
 
