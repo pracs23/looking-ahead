@@ -1,0 +1,70 @@
+#!/usr/bin/env python2.7
+import argparse
+import requests
+import logging
+import sys
+
+
+def run(args):
+    """
+    Method to run the Github PR stats
+    :param args: arguments provided at the command line
+    """
+    logging.getLogger().setLevel(logging.INFO)
+    headers = {'Authorization': 'token %s' % args.token}
+    github_year = str(int(args.year) + 1)
+    github_pr_url = 'https://api.github.com/search/issues?q=org:AudaxHealthInc+author:' + args.username + '+type:pr+created:<' + github_year + '-01-01+sort:author-date-asc'
+    logging.info("***** PR Stats for Github user: '{}' is as below, entered joining year: '{}' (Note: PR stats depend on the accuracy of entered joining year *****".format(args.username, args.year))
+    get_all_prs_for_a_user(github_pr_url, headers)
+
+
+
+def get_all_prs_for_a_user(url, headers):
+    """
+    Method to return the first and tenth PR url and PR date for a given username (passed through command  line)
+    :param url: github PR url
+    :param headers: github bearer token for authorization
+    """
+    pr_date_desc = {}
+    try:
+	response = requests.get(url, headers=headers)
+        all_prs = response.json().get('items')
+        for pr in all_prs:
+            pr_date_desc[pr.get('url')] =  pr.get('created_at')
+    except:
+	logging.error("Input parameters are not valid to return a success response. Please verify entered username, year or auth token.")
+        sys.exit(2)
+    sorted_date_pr = sorted(pr_date_desc.items(), key=lambda z:z[1])
+    print_stats(sorted_date_pr)
+
+
+
+def print_stats(sorted_date_pr):
+    if sorted_date_pr:
+        logging.info("First PR was created on: {} and the corresponding PR url is: {}".format(sorted_date_pr[0][1], sorted_date_pr[0][0]))
+        logging.info("Tenth PR was created on: {} and the corresponding PR url is: {}".format(sorted_date_pr[9][1], sorted_date_pr[9][0]))
+    else:
+        logging.error("Please verify if entered joining date is accurate. It looks like user hadn't joined the Rally GitHub by given date.")
+
+    
+
+
+def main():
+    """
+    Main method to pass command line arguments
+    """
+    try:
+        parser = argparse.ArgumentParser(description="Get GitHub PR stats for a user")
+        parser.add_argument('-username', help = 'Github username', dest = 'username', type=str, required=True)
+        parser.add_argument('-token', help = 'GitHub bearer token', dest = 'token', type = str, required=True)
+        parser.add_argument('-year', help = 'GitHub joining year in format yyyy', dest = 'year', type = str, required=True)
+        parser.set_defaults(func=run)
+        args=parser.parse_args()
+        args.func(args)
+        
+    except AssertionError:
+        logging.error('Missed passing in required arguments, like --Github organization!')
+        sys.exit(2)
+
+if __name__=="__main__":
+    main()
