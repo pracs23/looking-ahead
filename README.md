@@ -2,8 +2,13 @@
 
 Readme:
 
+How to run the code getfirstandTenthPR.py:
+==========
+python getfirstandTenthPR.py -username 'xxxx' -token 'aaaa' -year 'yyyy' 
 
-How to run:
+
+
+How to run the code git.py:
 ==========
 [[basic/oauth] With credentials (Pass the password/token in token)
 
